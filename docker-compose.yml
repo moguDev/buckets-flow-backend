@@ -1,0 +1,34 @@
+# コンテナ情報
+services:
+  # データベースコンテナの情報（dbというサービス名で登録）
+  db:
+    # 起動するコンテナ名を明示的に示す
+    container_name: postgresql_db
+    # 利用するイメージの指定（バージョンは指定なし）
+    image: postgres
+    # 記憶領域のマウント設定
+    # ローカルのデータディレクトリ：./tmp/db
+    # DockerEngine上のLinuxのディレクトリ：var/lib/postgresql/data
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    # db接続用のパスワード
+    # config/database.yamlのdefaultのpasswordにも同じパスワードを設定する
+    environment:
+      POSTGRES_PASSWORD: password
+  # アプリケーションのコンテナ（rails）の情報
+  web:
+    container_name: rails_app
+    # ビルド時のパスを設定（Dockerfileのパスを指定。gitリポジトリのパスなども可）
+    build: .
+    # 起動時のコマンド情報
+    # rm -f tmp/pids/server.pidでtmp/pids/server.pidを削除してからrailsを起動する
+    # 上記コマンドを実行しないと、rails起動時にserver.pidがなんとか・・・とエラーになる
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/app
+    # 別のサービスに依存していることを示す（上記のdbに依存していることを示す）
+    depends_on:
+      - db
+    # ポート番号のマッピング
+    ports:
+      - 3000:3000

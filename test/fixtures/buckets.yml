@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  filled: false
+  starttime: 1
+  endtime: 1
+  duration: 1
+  storage: 1
+  notes: MyText
+  completed_at: 2024-08-07 08:54:24
+
+two:
+  user_id: 1
+  filled: false
+  starttime: 1
+  endtime: 1
+  duration: 1
+  storage: 1
+  notes: MyText
+  completed_at: 2024-08-07 08:54:24
