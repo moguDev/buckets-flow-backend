@@ -10,6 +10,6 @@ module App
   class Application < Rails::Application
     config.load_defaults 7.0
     config.api_only = true
-    config.hosts << "https://buckets-flow-backend.onrender.com/" 
+    config.hosts << "buckets-flow-backend.onrender.com" 
   end
 end
