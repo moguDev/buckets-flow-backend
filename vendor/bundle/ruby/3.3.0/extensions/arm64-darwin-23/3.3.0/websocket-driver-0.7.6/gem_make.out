@@ -1,0 +1,18 @@
+current directory: /Users/mogu/Proj/product/buckets-flow-backend/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.7.6/ext/websocket-driver
+/Users/mogu/.asdf/installs/ruby/3.3.3/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/mogu/Proj/product/buckets-flow-backend/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.7.6/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20240807-67769-bic2in sitelibdir\=./.gem.20240807-67769-bic2in clean
+
+current directory: /Users/mogu/Proj/product/buckets-flow-backend/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.7.6/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20240807-67769-bic2in sitelibdir\=./.gem.20240807-67769-bic2in
+compiling websocket_mask.c
+linking shared-object websocket_mask.bundle
+
+current directory: /Users/mogu/Proj/product/buckets-flow-backend/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.7.6/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20240807-67769-bic2in sitelibdir\=./.gem.20240807-67769-bic2in install
+/opt/homebrew/bin/ginstall -c -m 0755 websocket_mask.bundle ./.gem.20240807-67769-bic2in
+
+current directory: /Users/mogu/Proj/product/buckets-flow-backend/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.7.6/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20240807-67769-bic2in sitelibdir\=./.gem.20240807-67769-bic2in clean
