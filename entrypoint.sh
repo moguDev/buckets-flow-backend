@@ -6,9 +6,9 @@ rm -f /app/tmp/pids/server.pid
 
 if [ "$RAILS_ENV" = "production" ]; then
 bundle install
-bundle exec rake assets:precompile
-bundle exec rake assets:clean
-bundle exec rake db:migrate
+# bundle exec rails assets:precompile
+bundle exec rails assets:clean
+bundle exec rails db:migrate
 fi
 
 # Then exec the container's main process (what's set as CMD in the Dockerfile).
