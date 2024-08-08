@@ -5,12 +5,12 @@ class Api::V1::BucketsController < ApplicationController
   before_action :authenticate_api_v1_user!
 
   def index
-    buckets = current_api_v1_user.buckets
+    buckets = @user.buckets
     render json: buckets
   end
 
   def create
-    @bucket = current_user.buckets.build(bucket_params)
+    @bucket = @user.buckets.build(bucket_params)
     if @bucket.save
       render json: @bucket, status: :created
     else
@@ -19,6 +19,10 @@ class Api::V1::BucketsController < ApplicationController
   end
 
   private
+  def set_user
+    @user = current_api_v1_user
+  end
+
   def set_bucket
     @bucket = Bucket.find(params[:id])
   end
