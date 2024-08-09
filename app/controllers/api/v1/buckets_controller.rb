@@ -1,7 +1,7 @@
 # app/controllers/api/v1/buckets_controller.rb
 class Api::V1::BucketsController < ApplicationController
   include DeviseTokenAuth::Concerns::SetUserByToken
-  
+  before_action :set_user, only: %i[index create]
   before_action :authenticate_api_v1_user!
 
   def index
