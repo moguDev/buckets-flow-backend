@@ -1,7 +1,7 @@
 # config/initializers/cors.rb
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins "http://localhost:3030","https://buckets-flow.com","https://www.buckets-flow.com", "https://buckets-flow.vercel.app"
+    origins "http://localhost:3030","https://buckets-flow.com","https://www.buckets-flow.com"
 
     resource "*",
       headers: :any,
