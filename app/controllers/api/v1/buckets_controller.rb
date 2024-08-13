@@ -39,13 +39,17 @@ def show_buckets
     return
   end
 
-  buckets = @user.buckets.where('starttime BETWEEN ? AND ?', start_date, end_date).group_by { |bucket| Time.at(bucket.starttime).strftime('%Y-%m-%d') }
+  buckets = @user.buckets.where('starttime BETWEEN ? AND ?', start_date, end_date)
 
-  # 全期間の日付をキーとして持つハッシュを生成
-  all_dates = date_range.to_a.map { |d| [d.strftime('%Y-%m-%d'), []] }.to_h
+  if period == 'year'
+    grouped_buckets = buckets.group_by { |bucket| Time.at(bucket.starttime).strftime('%Y-%m') }
+    all_dates = (date_range.map { |d| d.strftime('%Y-%m') }.uniq).map { |m| [m, []] }.to_h
+  else
+    grouped_buckets = buckets.group_by { |bucket| Time.at(bucket.starttime).strftime('%Y-%m-%d') }
+    all_dates = date_range.to_a.map { |d| [d.strftime('%Y-%m-%d'), []] }.to_h
+  end
 
-  # 既存のバケットデータを全期間の日付に追加
-  buckets.each do |date_key, bucket_list|
+  grouped_buckets.each do |date_key, bucket_list|
     all_dates[date_key] = bucket_list
   end
 
