@@ -56,10 +56,6 @@ class Api::V1::BucketsController < ApplicationController
     render json: all_dates
   end
 
-  def destroy_backdate
-    @user.buckets.where(starttime: 0).destroy_all
-  end
-
   private
   def set_user
     @user = current_api_v1_user
