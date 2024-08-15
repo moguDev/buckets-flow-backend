@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       resources :buckets, only: [:index, :create] do
         collection do
           get :show_buckets
+          get :destroy_backdate
         end
       end
     end

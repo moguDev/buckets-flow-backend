@@ -17,44 +17,48 @@ class Api::V1::BucketsController < ApplicationController
     end
   end
 
-def show_buckets
-  date = params[:date].to_date
-  period = params[:period]
+  def show_buckets
+    date = params[:date].to_date
+    period = params[:period]
 
-  case period
-  when 'week'
-    start_date = date.beginning_of_week.to_time.to_i
-    end_date = date.end_of_week.to_time.to_i
-    date_range = (date.beginning_of_week.to_date..date.end_of_week.to_date)
-  when 'month'
-    start_date = date.beginning_of_month.to_time.to_i
-    end_date = date.end_of_month.to_time.to_i
-    date_range = (date.beginning_of_month.to_date..date.end_of_month.to_date)
-  when 'year'
-    start_date = date.beginning_of_year.to_time.to_i
-    end_date = date.end_of_year.to_time.to_i
-    date_range = (date.beginning_of_year.to_date..date.end_of_year.to_date)
-  else
-    render json: { error: 'Invalid period' }, status: :bad_request
-    return
+    case period
+    when 'week'
+      start_date = date.beginning_of_week.to_time.to_i
+      end_date = date.end_of_week.to_time.to_i
+      date_range = (date.beginning_of_week.to_date..date.end_of_week.to_date)
+    when 'month'
+      start_date = date.beginning_of_month.to_time.to_i
+      end_date = date.end_of_month.to_time.to_i
+      date_range = (date.beginning_of_month.to_date..date.end_of_month.to_date)
+    when 'year'
+      start_date = date.beginning_of_year.to_time.to_i
+      end_date = date.end_of_year.to_time.to_i
+      date_range = (date.beginning_of_year.to_date..date.end_of_year.to_date)
+    else
+      render json: { error: 'Invalid period' }, status: :bad_request
+      return
+    end
+
+    buckets = @user.buckets.where('starttime BETWEEN ? AND ?', start_date, end_date)
+
+    if period == 'year'
+      grouped_buckets = buckets.group_by { |bucket| Time.at(bucket.starttime).strftime('%Y-%m') }
+      all_dates = (date_range.map { |d| d.strftime('%Y-%m') }.uniq).map { |m| [m, []] }.to_h
+    else
+      grouped_buckets = buckets.group_by { |bucket| Time.at(bucket.starttime).strftime('%Y-%m-%d') }
+      all_dates = date_range.to_a.map { |d| [d.strftime('%Y-%m-%d'), []] }.to_h
+    end
+
+    grouped_buckets.each do |date_key, bucket_list|
+      all_dates[date_key] = bucket_list
+    end
+
+    render json: all_dates
   end
 
-  buckets = @user.buckets.where('starttime BETWEEN ? AND ?', start_date, end_date)
-
-  if period == 'year'
-    grouped_buckets = buckets.group_by { |bucket| Time.at(bucket.starttime).strftime('%Y-%m') }
-    all_dates = (date_range.map { |d| d.strftime('%Y-%m') }.uniq).map { |m| [m, []] }.to_h
-  else
-    grouped_buckets = buckets.group_by { |bucket| Time.at(bucket.starttime).strftime('%Y-%m-%d') }
-    all_dates = date_range.to_a.map { |d| [d.strftime('%Y-%m-%d'), []] }.to_h
+  def destroy_backdate
+    @user.buckets.where(starttime: 0).destroy_all
   end
-
-  grouped_buckets.each do |date_key, bucket_list|
-    all_dates[date_key] = bucket_list
-  end
-
-  render json: all_dates
-end
 
   private
   def set_user
