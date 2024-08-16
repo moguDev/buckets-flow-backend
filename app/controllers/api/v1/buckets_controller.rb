@@ -24,15 +24,15 @@ class Api::V1::BucketsController < ApplicationController
     case period
     when 'week'
       start_date = date.beginning_of_week.in_time_zone('Asia/Tokyo').to_time.to_i
-      end_date = date.end_of_week.in_time_zone('Asia/Tokyo').to_time.to_i
+      end_date = date.end_of_week.in_time_zone('Asia/Tokyo').to_time.end_of_day.to_i
       date_range = (date.beginning_of_week.to_date..date.end_of_week.to_date)
     when 'month'
       start_date = date.beginning_of_month.in_time_zone('Asia/Tokyo').to_time.to_i
-      end_date = date.end_of_month.in_time_zone('Asia/Tokyo').to_time.to_i
+      end_date = date.end_of_month.in_time_zone('Asia/Tokyo').to_time.end_of_day.to_i
       date_range = (date.beginning_of_month.to_date..date.end_of_month.to_date)
     when 'year'
       start_date = date.beginning_of_year.in_time_zone('Asia/Tokyo').to_time.to_i
-      end_date = date.end_of_year.in_time_zone('Asia/Tokyo').to_time.to_i
+      end_date = date.end_of_year.in_time_zone('Asia/Tokyo').to_time.end_of_day.to_i
       date_range = (date.beginning_of_year.to_date..date.end_of_year.to_date)
     else
       render json: { error: 'Invalid period' }, status: :bad_request
