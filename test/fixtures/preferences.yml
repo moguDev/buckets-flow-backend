@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  timer_duration: 1
+  break_duration: 1
+  long_break_duration: 1
+
+two:
+  user: two
+  timer_duration: 1
+  break_duration: 1
+  long_break_duration: 1

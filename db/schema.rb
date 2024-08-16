@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_07_085424) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_16_032415) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,6 +25,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_07_085424) do
     t.datetime "completed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "preferences", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "timer_duration"
+    t.integer "break_duration"
+    t.integer "long_break_duration"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_preferences_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -52,4 +62,5 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_07_085424) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "preferences", "users"
 end

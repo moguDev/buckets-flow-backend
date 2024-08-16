@@ -9,6 +9,7 @@ Rails.application.routes.draw do
           get :show_buckets
         end
       end
+      resource :preferences, only: [:show, :create, :update]
     end
   end
 end
