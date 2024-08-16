@@ -4,6 +4,8 @@ class Bucket < ApplicationRecord
   validates :duration, :storage, numericality: { greater_than: 0 }
   validate :endtime_is_greater_than_starttime
 
+  belongs_to :user
+
   private
 
   def endtime_is_greater_than_starttime
@@ -11,6 +13,4 @@ class Bucket < ApplicationRecord
       errors.add(:endtime, "must be greater than starttime")
     end
   end
-
-  belongs_to :user
 end
