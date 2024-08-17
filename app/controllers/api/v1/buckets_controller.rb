@@ -3,11 +3,13 @@ class Api::V1::BucketsController < ApplicationController
   before_action :set_user
   before_action :authenticate_api_v1_user!
 
+  # ログインユーザのすべてのbucketを返す
   def index
     buckets = @user.buckets
     render json: buckets
   end
 
+  # 新しいbucketを作成する
   def create
     @bucket = @user.buckets.build(bucket_params)
     if @bucket.save
@@ -17,6 +19,7 @@ class Api::V1::BucketsController < ApplicationController
     end
   end
 
+  # ログインユーザの指定された期間のbucketを返す
   def show_buckets
     date = params[:date].to_date
     period = params[:period]
@@ -54,6 +57,35 @@ class Api::V1::BucketsController < ApplicationController
     end
 
     render json: all_dates
+  end
+
+  def show_top_users
+    period = params[:period]
+    date = params[:date].to_date rescue Date.today
+
+    case period
+    when 'week'
+      start_date = date.beginning_of_week.in_time_zone('Asia/Tokyo').to_time.to_i
+      end_date = date.end_of_week.in_time_zone('Asia/Tokyo').to_time.end_of_day.to_i
+    when 'month'
+      start_date = date.beginning_of_month.in_time_zone('Asia/Tokyo').to_time.to_i
+      end_date = date.end_of_month.in_time_zone('Asia/Tokyo').to_time.end_of_day.to_i
+    when 'all'
+      start_date = 0
+      end_date = Time.now.in_time_zone('Asia/Tokyo').to_time.to_i
+    else
+      render json: { error: 'Invalid period' }, status: :bad_request
+      return
+    end
+
+    users = User.joins(:buckets)
+                .where('buckets.starttime BETWEEN ? AND ?', start_date, end_date)
+                .select('users.id, users.name, users.image, SUM(buckets.duration) AS total_duration')
+                .group('users.id')
+                .order('total_duration DESC')
+                .limit(10)
+
+    render json: users.map { |user| { name: user.name, image: user.image, total_duration: user.total_duration } }
   end
 
   private
