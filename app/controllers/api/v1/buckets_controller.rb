@@ -1,7 +1,7 @@
 class Api::V1::BucketsController < ApplicationController
   include DeviseTokenAuth::Concerns::SetUserByToken
   before_action :set_user
-  before_action :authenticate_api_v1_user!
+  before_action :authenticate_api_v1_user!, only: %i[index create show_buckets ]
 
   # ログインユーザのすべてのbucketを返す
   def index
