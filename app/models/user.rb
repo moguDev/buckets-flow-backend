@@ -32,4 +32,6 @@ class User < ActiveRecord::Base
 
   has_many :buckets, dependent: :destroy
   has_one :preference, dependent: :destroy
+
+  mount_uploader :image, ImageUploader
 end

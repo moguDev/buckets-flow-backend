@@ -30,6 +30,8 @@ gem 'base64'
 gem 'bigdecimal'
 gem 'mutex_m'
 
+gem 'carrierwave', '~> 2.0'
+gem 'mini_magick', '~> 4.11'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
