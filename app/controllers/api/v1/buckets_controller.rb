@@ -59,6 +59,7 @@ class Api::V1::BucketsController < ApplicationController
     render json: all_dates
   end
 
+  # リーダーボード用（week, month, allの期間ごとに上位10名の返す）
   def show_top_users
     period = params[:period]
     date = params[:date].to_date rescue Date.today
