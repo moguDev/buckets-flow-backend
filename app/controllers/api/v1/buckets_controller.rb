@@ -89,6 +89,21 @@ class Api::V1::BucketsController < ApplicationController
     render json: users.map { |user| { name: user.name, image: user.image, total_duration: user.total_duration } }
   end
 
+  def show_today_buckets
+    start_date = Time.now.in_time_zone('Asia/Tokyo').beginning_of_day.to_i
+    end_date = Time.now.in_time_zone('Asia/Tokyo').end_of_day.to_i
+
+    users = User.joins(:buckets)
+                .where('buckets.starttime BETWEEN ? AND ?', start_date, end_date)
+                .select('users.id, count(buckets.id) AS bucket_count, SUM(buckets.duration) AS total_duration')
+                .group('users.id')
+                .order('total_duration DESC')
+
+    render json: users.map { |user| [user.id, { bucket_count: user.bucket_count, total_duration: user.total_duration }] }.to_h
+
+  end
+
+
   private
   def set_user
     @user = current_api_v1_user
