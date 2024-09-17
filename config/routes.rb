@@ -9,6 +9,8 @@ Rails.application.routes.draw do
         collection do
           get :show_buckets
           get :show_top_users
+          get :show_today_buckets
+          get :show_recent_rainfall
         end
       end
 
