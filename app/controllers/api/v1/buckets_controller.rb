@@ -3,13 +3,11 @@ class Api::V1::BucketsController < ApplicationController
   before_action :set_user
   before_action :authenticate_api_v1_user!, only: %i[index create show_buckets ]
 
-  # ログインユーザのすべてのbucketを返す
   def index
     buckets = @user.buckets
     render json: buckets
   end
 
-  # 新しいbucketを作成する
   def create
     @bucket = @user.buckets.build(bucket_params)
     if @bucket.save
