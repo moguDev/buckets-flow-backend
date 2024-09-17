@@ -114,7 +114,7 @@ class Api::V1::BucketsController < ApplicationController
     user_count = today_buckets.select(:user_id).distinct.count
 
     # 7時間前から1時間ごとに区切る
-    rainfall_data = (0..6).map do |hour_ago|
+    rainfall_data = (0..4).map do |hour_ago|
       time = current_time - hour_ago.hours
 
       # 1時間分のバケットデータを取得
