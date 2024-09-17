@@ -106,6 +106,12 @@ class Api::V1::BucketsController < ApplicationController
   def show_recent_rainfall
     # 現在の時間を東京時間で取得し、1時間区切りにする
     current_time = Time.now.in_time_zone('Asia/Tokyo').beginning_of_hour
+    start_of_day = current_time.beginning_of_day
+
+    # 当日の全バケットの合計時間とユーザー数を計算
+    today_buckets = Bucket.where('starttime BETWEEN ? AND ?', start_of_day.to_i, current_time.end_of_day.to_i)
+    total_duration = today_buckets.sum(:duration)
+    user_count = today_buckets.select(:user_id).distinct.count
 
     # 7時間前から1時間ごとに区切る
     rainfall_data = (0..6).map do |hour_ago|
@@ -113,17 +119,21 @@ class Api::V1::BucketsController < ApplicationController
 
       # 1時間分のバケットデータを取得
       buckets = Bucket.where('starttime BETWEEN ? AND ?', time.to_i, (time + 59.minutes + 59.seconds).to_i)
-      total_duration = buckets.sum(:duration)
+      duration = buckets.sum(:duration)
 
       # 結果をハッシュにまとめる。現在時刻と一致する場合は "現在" にする
       {
         time: (time == current_time ? '現在' : time.strftime('%-H:%M')),
-        total_duration: total_duration
+        duration: duration
       }
     end
 
     # 昇順に並べ替えて JSON を返す
-    render json: rainfall_data.reverse
+    render json: {
+      total_duration: total_duration,
+      user_count: user_count,
+      rainfall_data: rainfall_data.reverse
+    }
   end
 
 
